@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express, { Request, Response, NextFunction} from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
