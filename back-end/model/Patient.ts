@@ -11,9 +11,20 @@ export class Patient{
         user: User;
         appointments?: Appointment[];
     }){
+        this.validate(patient);
         this.id = patient.id;
         this.user = patient.user;
         this.appointments = patient.appointments || [];
+    }
+
+    validate(patient:{
+        id?:number;
+        user: User;
+        appointments?: Appointment[];
+    }){
+        if(!patient.user){
+            throw new Error("Patient's user information is required.");
+        }  
     }
     
     getId(): number | undefined {

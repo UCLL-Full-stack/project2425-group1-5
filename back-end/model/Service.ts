@@ -26,6 +26,7 @@ export class Service{
         name:string;
         description:string;
         price:number;
+        doctors : Doctor[];
     }){
         if(!service.name){
             throw new Error('Service name is required.');
@@ -33,8 +34,11 @@ export class Service{
         if(!service.description){
             throw new Error('Service description is required.');
         }
-        if(!service.price){
-            throw new Error('Service price is required.');
+        if (service.price === undefined || service.price < 0) {
+            throw new Error('Service price is required and must be a positive number.');
+        }
+        if (!service.doctors || service.doctors.length === 0) {
+            throw new Error('At least one doctor must be provided for the service.');
         }
     }
 

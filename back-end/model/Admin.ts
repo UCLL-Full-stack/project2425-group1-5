@@ -8,10 +8,20 @@ export class Admin{
         id?:number;
         user: User;
     }){
+        this.validate(admin);
         this.id = admin.id;
         this.user = admin.user;
     }
     
+    validate(admin:{
+        id?:number;
+        user: User;
+    }){
+        if(!admin.user){
+            throw new Error("Admin's user information is required.");
+        }  
+    }
+
     getId(): number | undefined {
         return this.id;
     }

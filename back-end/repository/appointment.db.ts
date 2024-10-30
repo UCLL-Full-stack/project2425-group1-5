@@ -95,32 +95,39 @@ const getAllAppointments = (): Appointment[] => {
     return appointments;
 };
 
-const getAppointmentByDoctorAndPatient = ({
-    doctorId,
-    patientId,
-}:{
-    doctorId : number;
-    patientId : number;
-}): Appointment | null=>{
-    const appointment = appointments.find(
-        (appointment) =>
-            appointment.getDoctor().getId() === doctorId &&
-            appointment.getPatient().getId() === patientId
-    );
-    // if (!appointment) {
-    //     throw new Error(`No appointment found for doctorId ${doctorId} and patientId ${patientId}`);
-    // }
 
-    return appointment || null;
-};
-
-const createAppointment = (appointment : Appointment) =>{
+const addAppointment = (appointment : Appointment) =>{
     appointments.push(appointment);
     return appointment;
 }
 
+const getAppointmentByDoctorAndPatient = ({
+    doctorId,
+    patientId,
+}:{
+    doctorId: number;
+    patientId : number;
+}): Appointment | undefined =>{
+    return appointments.find(
+        (appointment) =>
+            appointment.getDoctor().getId() === doctorId &&
+            appointment.getPatient().getId() === patientId
+    );
+};
+
+const getAppointmentById = ({id}:{id:number}): Appointment|null =>{
+    try{
+        return appointments.find((appointment) => appointment.getId()=== id) || null;
+    }catch(error){
+        console.log(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     getAllAppointments,
+    addAppointment,
     getAppointmentByDoctorAndPatient,
-    createAppointment
+    getAppointmentById
+
 };

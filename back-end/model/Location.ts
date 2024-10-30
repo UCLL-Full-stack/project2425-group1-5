@@ -10,6 +10,7 @@ export class Location{
         city : string;
         postalCode : number;
     }){
+        this.validate(location);
         this.id = location.id;
         this.streetNumber = location.streetNumber;
         this.city = location.city;
@@ -22,13 +23,13 @@ export class Location{
         postalCode : number;
     }) {
         if (!location.streetNumber) {
-            throw new Error('Street Number is required');
+            throw new Error('Street Number is required.');
         }
         if (!location.city) {
-            throw new Error('City is required');
+            throw new Error('City is required.');
         }
         if (!location.postalCode) {
-            throw new Error('Postal Code is required');
+            throw new Error('Postal Code is required.');
         }
     }
 

@@ -15,6 +15,7 @@ export class Doctor{
         availability : boolean;
         appointments?: Appointment[];
     }){
+        this.validate(doctor);
         this.id = doctor.id;
         this.user = doctor.user;
         this.speciality = doctor.speciality;
@@ -22,6 +23,24 @@ export class Doctor{
         this.appointments = doctor.appointments || [];
     }
     
+    validate(doctor:{
+        id?:number;
+        user: User;
+        speciality : string;
+        availability : boolean;
+        appointments?: Appointment[];
+    }){
+        if(!doctor.user){
+            throw new Error("Doctor's user information is required.");
+        }
+        if(!doctor.speciality){
+            throw new Error("Doctor's speciality is required.");
+        }
+        if(doctor.availability === undefined){
+            throw new Error("Doctor's availability status is required.");
+        }
+    }
+
     getId(): number | undefined {
         return this.id;
     }

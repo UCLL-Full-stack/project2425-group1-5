@@ -44,16 +44,16 @@ export class Appointment{
             throw new Error('Appointment\'s End time is required.');
         }
         if (appointment.startTime > appointment.endTime) {
-            throw new Error('Start time cannot be after end time');
+            throw new Error('Start time cannot be after end time.');
         }
         if(!appointment.status){
             throw new Error('Appointment\'s Status is required.');
         }        
         if(!appointment.date){
-            throw new Error('Appointment\'s date is required.');
+            throw new Error('Appointment\'s Date is required.');
         }
         if (!appointment.doctor) {
-            throw new Error("Appointment's doctor is required.");
+            throw new Error("Appointment's Doctor is required.");
         }
         if (!appointment.patient) {
             throw new Error("Appointment's patient is required.");

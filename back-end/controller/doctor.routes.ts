@@ -33,6 +33,19 @@
 import express, { NextFunction, Request, Response } from 'express';
 import doctorService from '../service/doctor.service';
 
+/**
+ * @swagger
+ * /doctors:
+ *   get:
+ *     summary: Get a list of all doctors.
+ *     responses:
+ *       "200":
+ *         description: A Json Array of doctors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Doctor'
+ */
 const doctorRouter = express.Router();
 doctorRouter.get('/', async(req:Request, res: Response)=>{
     try{
@@ -44,7 +57,26 @@ doctorRouter.get('/', async(req:Request, res: Response)=>{
 });
 
 
-
+/**
+ * @swagger
+ * /doctors/{id}:
+ *   get:
+ *     summary: Get a list of doctors by given id.
+ *     parameters:
+ *        - in : path
+ *          name : id
+ *          schema:
+ *            type : number
+ *          required : true
+ *          description : The id of doctor to be retrieved
+ *     responses:
+ *       "200":
+ *         description: A Json Array of doctors
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Doctor'
+ */
 doctorRouter.get('/' , async(req: Request, res: Response)=>{
     try{
         const id = parseInt(req.params.id,);

@@ -67,6 +67,12 @@ const getPatientById = ({id}:{id: number}) : Patient| null =>{
     }
 } 
 
+const getAllPatients = (): Patient[] =>{
+    return patients;
+}
 export default{
-    getPatientById
+    getPatientById,
+    getAllPatients
 };
+
+

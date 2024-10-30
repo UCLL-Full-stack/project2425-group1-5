@@ -37,7 +37,16 @@ app.get('/doctors/:id', async(req,res, next: NextFunction) =>{
     }catch(error){
         next(error);
     }
-})
+});
+
+app.get('/patients', async(req,res, next: NextFunction)=>{
+    try{
+        const patients = await patientService.getAllPatients();
+        res.status(200).json(patients);
+    }catch(error){
+        next(error);
+    }
+});
 
 app.get('/patients/:id', async(req,res, next: NextFunction) =>{
     try{
@@ -48,7 +57,15 @@ app.get('/patients/:id', async(req,res, next: NextFunction) =>{
         next(error);
     }
 })
-
+app.get('/appointments/:id', async(req,res, next: NextFunction) =>{
+    try{
+        const id = parseInt(req.params.id);
+        const appointment = await appointmentService.getAppointmentById(id);
+        res.status(200).json(appointment);
+    }catch(error){
+        next(error);
+    }
+});
 app.get('/upcomingAppointments', async(req,res,next : NextFunction) =>{
     try{
         const upcomingAppointments = await appointmentService.getUpcomingAppointments();
@@ -58,10 +75,34 @@ app.get('/upcomingAppointments', async(req,res,next : NextFunction) =>{
     }
 })
 
+app.get('/appointments', async(req,res,next : NextFunction) =>{
+    try{
+        const appointments = await appointmentService.getAllAppointments();
+        res.status(200).json(appointments);
+    }catch(error){
+        next(error);
+    }
+})
+
 app.use('/appointments', appointmentRouter);
 
 
+const swaggerOpts = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Courses API',
+            version: '1.0.0',
+        },
+    },
+    apis: ['./controller/*.routes.ts'],
+};
+const swaggerSpec = swaggerJSDoc(swaggerOpts);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use((err : Error, req: Request, res: Response, next : NextFunction) => {
+    res.status(400).json({status : 'application error', message : err.message})
+});
 
 
 app.listen(port || 3000, () => {
