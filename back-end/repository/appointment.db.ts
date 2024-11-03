@@ -10,7 +10,7 @@ const doctors = [
         id: 1,
         user: new User({
             id: 1,
-            name: 'dr.John Smith',
+            name: 'Dr. John Smith',
             email: 'john.smith@hospital.com',
             password: 'smith123',
             role: 'doctor',
@@ -23,7 +23,7 @@ const doctors = [
         id: 2,
         user: new User({
             id: 2,
-            name: 'dr.Emily Jones',
+            name: 'Dr. Emily Jones',
             email: 'emily.jones@hospital.com',
             password: 'jones123',
             role: 'doctor',

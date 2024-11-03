@@ -49,6 +49,7 @@ const Doctors: React.FC = () =>{
                         <p>Email: {selectDoctor.user.email} </p>
                         <p>Password: {selectDoctor.user.password} </p>
                         <p>Availability: {selectDoctor.availability ? "Available" : "Not Available"}</p>
+
                         </section>
                         
                     )
