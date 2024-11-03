@@ -3,21 +3,22 @@ import Link from "next/link";
 
 type Props = {
     appointments: Array<Appointment>;
+    selectAppointment : (appointment: Appointment) => void;
 
 };
 
-const AppointmentOverview: React.FC<Props> = ({ appointments}: Props) => {
+const AppointmentOverview: React.FC<Props> = ({ appointments, selectAppointment}: Props) => {
     return (
         <>
             {appointments && (
-                <table className="min-w-full border-collapse border border-dark-300  table-hover" >
+                <table className="table table-hover" >
                     <thead className="bg-gray-100">
                         <tr>
-                            <th scope="col" className="border border-gray-300 px-0 py-2">Start Time</th>
-                            <th scope="col" className="border border-gray-300 px-0 py-2">End Time</th>
-                            <th scope="col" className="border border-gray-300 px-0 py-2">Status</th>
-                            <th scope="col" className="border border-gray-300 px-0 py-2">Date</th>
-                            <th scope="col" className="border border-gray-300 px-0 py-2">Doctor Id</th>
+                            <th scope="col">Start Time</th>
+                            <th scope="col">End Time</th>
+                            <th scope="col" >Status</th>
+                            <th scope="col" >Date</th>
+                            {/* <th scope="col" className="border border-gray-300 px-0 py-2">Doctor Id</th>
                             <th scope="col" className="border border-gray-300 px-0 py-2">Doctor Name</th>
                             <th scope="col" className="border border-gray-300 px-0 py-2">Doctor Email</th>
                             <th scope="col" className="border border-gray-300 px-0 py-2">Doctor Password</th>
@@ -28,18 +29,21 @@ const AppointmentOverview: React.FC<Props> = ({ appointments}: Props) => {
                             <th scope="col" className="border border-gray-300 px-0 py-2">Patient Name</th>
                             <th scope="col" className="border border-gray-300 px-0 py-2">Patient Email</th>
                             <th scope="col" className="border border-gray-300 px-0 py-2">Patient Password</th>
-                            <th scope="col" className="border border-gray-300 px-0 py-2">Patient Role</th>
+                            <th scope="col" className="border border-gray-300 px-0 py-2">Patient Role</th> */}
                         </tr>
                     </thead>
                     <tbody>
                         {appointments.map((appointment, index) => (
-                            <tr key={index}>
+                            <tr key={index} onClick={() => {
+                                console.log("Appointment selected:", appointment);
+                                selectAppointment(appointment);
+                            }} role='button'>
                             
                                 <td>{appointment.startTime.toLocaleString()}</td>
                                 <td>{appointment.endTime.toLocaleString()}</td>
                                 <td>{appointment.status}</td>
                                 <td>{appointment.date.toLocaleString()}</td>
-                                <td>{appointment.doctor.id}</td>
+                                {/* <td>{appointment.doctor.id}</td>
                                 <td>{appointment.doctor.user.name}</td>
                                 <td>{appointment.doctor.user.email}</td>
                                 <td>{appointment.doctor.user.password}</td>
@@ -53,7 +57,7 @@ const AppointmentOverview: React.FC<Props> = ({ appointments}: Props) => {
                                 <td>{appointment.patient.user.name}</td>
                                 <td>{appointment.patient.user.email}</td>
                                 <td>{appointment.patient.user.password}</td>
-                                <td>{appointment.patient.user.role}</td>
+                                <td>{appointment.patient.user.role}</td> */}
                             </tr>
                         ))}
                     </tbody>
