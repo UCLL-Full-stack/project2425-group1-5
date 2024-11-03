@@ -32,6 +32,19 @@ const doctors = [
         availability: false,
         appointments: [],
     }),
+    new Doctor({
+        id: 5,
+        user: new User({
+            id: 5,
+            name: 'Dr. David Miller',
+            email: 'david.miller@hospital.com',
+            password: 'miller123',
+            role: 'doctor',
+        }),
+        speciality: 'General Medicine',
+        availability: true,
+        appointments: [],
+    }),
 ];
 
 // Creating patients
@@ -39,22 +52,35 @@ const patients = [
     new Patient({
         id: 1,
         user: new User({
-            id: 6,
-            name: 'Alice Brown',
-            email: 'alice.brown@hospital.com',
+            id: 1,
+            name: 'Alice Johnson',
+            email: 'alice.johnson@hospital.com',
             password: 'alice123',
             role: 'patient',
         }),
+        appointments: [],
     }),
     new Patient({
         id: 2,
         user: new User({
-            id: 7,
-            name: 'Bob White',
-            email: 'bob.white@hospital.com',
+            id: 2,
+            name: 'Bob Williams',
+            email: 'bob.williams@hospital.com',
             password: 'bob123',
             role: 'patient',
         }),
+        appointments: [],
+    }),
+    new Patient({
+        id: 5,
+        user: new User({
+            id: 5,
+            name: 'Ella Davis',
+            email: 'ella.davis@hospital.com',
+            password: 'ella123',
+            role: 'patient',
+        }),
+        appointments: [],
     }),
 ];
 
