@@ -1,6 +1,20 @@
 
 type Role = 'admin' | 'doctor' | 'patient';
 
+type LocationInput = {
+    id?: number;
+    street_number : number;
+    postal_code : number;
+    city : string;
+}
+
+type ServiceInput = {
+    id?: number;
+    name : string;
+    description: string;
+    price : number;
+}
+
 type UserInput = {
     id?: number;
     name: string;
@@ -13,6 +27,7 @@ type DoctorInput = {
     id?: number;
     user : UserInput;
     speciality: string;
+    service : ServiceInput;
     availability : boolean;
 }
 
@@ -21,18 +36,22 @@ type PatientInput = {
     user: UserInput;
 }
 
+
 type AppointmentInput = {
     id?: number;
-    startTime : Date;
-    endTime : Date;
+    start_time : Date;
+    end_time : Date;
     status : string;
     date : Date;
     doctor: DoctorInput;
     patient : PatientInput;
+    location : LocationInput
 }
 
 export {
     Role,
+    LocationInput,
+    ServiceInput,
     UserInput,
     DoctorInput,
     PatientInput,

@@ -1,5 +1,10 @@
 import { User } from "./User";
 import { Appointment } from "./Appointment";
+import {
+    User as UserPrisma,
+    Appointment as AppointmentPrisma,
+    Patient as PatientPrisma
+} from '@prisma/client';
 
 export class Patient{
     private id?: number;
@@ -45,6 +50,16 @@ export class Patient{
             this.appointments.length === patient.getAppointments().length &&
             this.appointments.every((appointment, index) =>appointment.equals(patient.getAppointments()[index]))
         );
+    }
+
+    static from ({
+        id,
+        user,
+    }: PatientPrisma & {user: UserPrisma}){
+        return new Patient({
+            id,
+            user : User.from(user),
+        });
     }
 
 }

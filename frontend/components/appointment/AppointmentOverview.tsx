@@ -39,8 +39,8 @@ const AppointmentOverview: React.FC<Props> = ({ appointments, selectAppointment}
                                 selectAppointment(appointment);
                             }} role='button'>
                             
-                                <td>{appointment.startTime.toLocaleString()}</td>
-                                <td>{appointment.endTime.toLocaleString()}</td>
+                                <td>{appointment.start_time.toLocaleString()}</td>
+                                <td>{appointment.end_time.toLocaleString()}</td>
                                 <td>{appointment.status}</td>
                                 <td>{appointment.date.toLocaleString()}</td>
                                 {/* <td>{appointment.doctor.id}</td>

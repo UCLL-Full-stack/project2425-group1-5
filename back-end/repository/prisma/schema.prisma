@@ -1,0 +1,79 @@
+generator client{
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Role{
+    admin
+    doctor
+    patient
+}
+
+model Doctor {
+    id            Int           @id @default(autoincrement())
+    speciality    String
+    availability  Boolean       @default(false)
+    userId        Int           @unique
+    user          User          @relation(fields: [userId], references: [id])
+    serviceId     Int
+    service       Service       @relation(fields: [serviceId], references:[id])       
+    appointments  Appointment[]
+}
+
+model Patient {
+    id             Int    @id @default(autoincrement())
+    userId         Int    @unique
+    user           User   @relation(fields: [userId], references:[id])
+    appointments   Appointment[]
+}
+
+model Admin {
+    id             Int    @id @default(autoincrement())
+    userId         Int    @unique
+    user           User   @relation(fields: [userId], references:[id])
+}
+
+model User {
+    id       Int    @id @default(autoincrement())
+    name     String  
+    email    String
+    password String
+    role     Role
+    doctor   Doctor?
+    patient  Patient?
+    admin    Admin?
+}
+
+model Appointment {
+    id             Int       @id @default(autoincrement())
+    start_time      DateTime  @default(now())
+    end_time        DateTime  
+    status         String
+    date           DateTime  
+    doctorId       Int        
+    doctor         Doctor                @relation(fields: [doctorId], references: [id])
+    patientId      Int        
+    patient        Patient               @relation(fields: [patientId], references: [id])
+    locationId     Int
+    location       AppointmentLocation   @relation(fields: [locationId], references: [id])
+}
+
+model AppointmentLocation {
+    id            Int     @id @default(autoincrement())
+    street_number Int   
+    city          String
+    postal_code   Int
+    appointments  Appointment[]
+}
+
+model Service {
+    id          Int     @id @default(autoincrement())
+    name        String
+    description String
+    price       Int
+    doctors     Doctor[]
+}

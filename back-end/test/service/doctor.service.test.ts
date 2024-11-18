@@ -4,6 +4,7 @@ import { Doctor } from "../../model/Doctor";
 import { Appointment } from "../../model/Appointment";
 import doctorDb from "../../repository/doctor.db";
 import doctorService from "../../service/doctor.service";
+import { Service } from "../../model/Service";
 
 
 const userInputDoctor : UserInput = {
@@ -30,11 +31,25 @@ const userDoctor2 = new User({
     ...userInputDoctor2,
 });
 
+const service1 = new Service({
+    name: "Cardiology",
+    description: "Heart care services",
+    price: 150,
+    doctors: [],
+});
+
+const service2 = new Service({
+    name: "Neurology",
+    description: "Nervous system care services",
+    price: 150,
+    doctors: [],
+});
 
 const doctor = new Doctor({
     id: 5,
     user : userDoctor,
     speciality : 'Cardiology',
+    service : service1,
     availability : true
 });
 
@@ -42,13 +57,14 @@ const doctor2 = new Doctor({
     id: 6,
     user: userDoctor2,
     speciality: 'Neurology',
+    service : service2,
     availability: true
 });
 
 
 let mockDoctordbGetDoctorById :  jest.SpyInstance<Doctor|null, [{id: number}], any>;
 
-let mockDoctordbGetAllDoctors : jest.SpyInstance<Doctor[],[]>;
+let mockDoctordbGetAllDoctors : jest.SpyInstance<Promise<Doctor[]>,[], any>;
 
 beforeEach(() =>{
     mockDoctordbGetDoctorById = jest.spyOn(doctorDb, 'getDoctorById');
@@ -75,12 +91,13 @@ test("given: a valid doctor id, when: get doctor by id, then: doctor with corres
 
 });
 
-test("given: a request to get all doctors, when: get all doctors, then: all the doctors are displayed.",() =>{
+test("given: a request to get all doctors, when: get all doctors, then: all the doctors are displayed.",async() =>{
     const allDoctors = [doctor, doctor2];
 
-    mockDoctordbGetAllDoctors.mockReturnValue(allDoctors);
+    mockDoctordbGetAllDoctors.mockResolvedValue(allDoctors);
+    // mockDoctordbGetAllDoctors.mockReturnValue(allDoctors); // this was before orm prisma
 
-    const result = doctorService.getAllDoctors();
+    const result = await doctorService.getAllDoctors();
 
     expect(mockDoctordbGetAllDoctors).toHaveBeenCalled(); 
     expect(result).toEqual(allDoctors);

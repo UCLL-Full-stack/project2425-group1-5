@@ -44,8 +44,8 @@ const Appointments: React.FC =() =>{
                     selectAppointment&&(
                         <section style={{ marginTop: "20px" }}>
                         <h1>Selected Appointment: {selectAppointment.id}</h1>
-                        <p>Start Time {selectAppointment.startTime.toLocaleString()} </p>
-                        <p>End Time {selectAppointment.endTime.toLocaleString()} </p>
+                        <p>Start Time {selectAppointment.start_time.toLocaleString()} </p>
+                        <p>End Time {selectAppointment.end_time.toLocaleString()} </p>
                         <p>Status {selectAppointment.status} </p>
                         <p>Date {selectAppointment.date.toLocaleString()} </p>
                         <p>Doctor Id {selectAppointment.doctor.id} </p>

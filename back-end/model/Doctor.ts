@@ -1,11 +1,19 @@
 import { Appointment } from "./Appointment";
 import { User } from "./User";
+import { Service } from "./Service";
+import {
+    User as UserPrisma,
+    Appointment as AppointmentPrisma,
+    Service as ServicePrisma,
+    Doctor as DoctorPrisma,
+} from '@prisma/client';
 
 export class Doctor{
     private id?: number;
     private user: User;
     private speciality : string;
     private availability :boolean;
+    private service : Service;
     private appointments : Appointment[];
 
     constructor(doctor:{
@@ -13,6 +21,7 @@ export class Doctor{
         user: User;
         speciality : string;
         availability : boolean;
+        service : Service;
         appointments?: Appointment[];
     }){
         this.validate(doctor);
@@ -20,6 +29,7 @@ export class Doctor{
         this.user = doctor.user;
         this.speciality = doctor.speciality;
         this.availability = doctor.availability;
+        this.service = doctor.service;
         this.appointments = doctor.appointments || [];
     }
     
@@ -28,6 +38,7 @@ export class Doctor{
         user: User;
         speciality : string;
         availability : boolean;
+        service : Service
         appointments?: Appointment[];
     }){
         if(!doctor.user){
@@ -35,6 +46,9 @@ export class Doctor{
         }
         if(!doctor.speciality){
             throw new Error("Doctor's speciality is required.");
+        }
+        if(!doctor.service){
+            throw new Error("A Doctor must provide atleast one service.");
         }
         if(doctor.availability === undefined){
             throw new Error("Doctor's availability status is required.");
@@ -57,6 +71,10 @@ export class Doctor{
         return this.availability;
     }
 
+    getService(): Service{
+        return this.service;
+    }
+
     getAppointments(): Appointment[]{
         return this.appointments;
     }
@@ -67,9 +85,28 @@ export class Doctor{
             this.user.equals(doctor.getUser())&&
             this.speciality  === doctor.getSpeciality()&&
             this.availability === doctor.getAvailability()&&
+            this.service === doctor.getService()&&
             this.appointments.length === doctor.getAppointments().length &&
             this.appointments.every((appointment, index) =>appointment.equals(doctor.getAppointments()[index]))
         );
+    }
+
+    static from({
+        id,
+        user,
+        speciality,
+        availability,
+        service,
+        appointments = [],
+    }: DoctorPrisma & {user : UserPrisma; service : ServicePrisma, appointments?: AppointmentPrisma[]}){
+        return new Doctor({
+            id,
+            user : User.from(user),
+            speciality,
+            availability,
+            service : Service.from(service),
+            // appointments: appointments.map(appointment => Appointment.from(appointment))
+        });
     }
 
 }

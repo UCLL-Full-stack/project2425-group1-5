@@ -1,4 +1,8 @@
 import { Doctor } from "./Doctor";
+import {
+    Doctor as DoctorPrisma,
+    Service as ServicePrisma
+} from '@prisma/client';
 
 export class Service{
     private id?: number;
@@ -12,21 +16,21 @@ export class Service{
         name : string;
         description : string;
         price : number;
-        doctors : Doctor[]
+        doctors?: Doctor[]
     }){
         this.validate(service);
         this.id = service.id;
         this.name = service.name;
         this.description = service.description;
         this.price = service.price;
-        this.doctors = service.doctors;
+        this.doctors = service.doctors || [];
     }
 
     validate(service:{
         name:string;
         description:string;
         price:number;
-        doctors : Doctor[];
+        doctors?: Doctor[];
     }){
         if(!service.name){
             throw new Error('Service name is required.');
@@ -37,9 +41,7 @@ export class Service{
         if (service.price === undefined || service.price < 0) {
             throw new Error('Service price is required and must be a positive number.');
         }
-        if (!service.doctors || service.doctors.length === 0) {
-            throw new Error('At least one doctor must be provided for the service.');
-        }
+
     }
 
     getId(): number | undefined {
@@ -66,6 +68,15 @@ export class Service{
             this.price === service.getPrice()&&
             this.doctors.every((doctor, index) =>doctor.equals(service.getDoctors()[index]))
         );
+    }
+
+    static from({id,name,description, price}: ServicePrisma){
+        return new Service({
+            id,
+            name,
+            description,
+            price
+        });
     }
 
 }

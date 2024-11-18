@@ -1,7 +1,7 @@
 import { Doctor } from "../model/Doctor";
 import doctorDb from "../repository/doctor.db";
 
-const getAllDoctors = (): Doctor[] =>{
+const getAllDoctors = async(): Promise<Doctor[]> =>{
     return doctorDb.getAllDoctors();
 };
 
