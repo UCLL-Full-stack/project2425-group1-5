@@ -62,27 +62,49 @@ const doctor2 = new Doctor({
 });
 
 
-let mockDoctordbGetDoctorById :  jest.SpyInstance<Doctor|null, [{id: number}], any>;
+// let mockDoctordbGetDoctorById :  jest.SpyInstance<Doctor|null, [{id: number}], any>;
 
-let mockDoctordbGetAllDoctors : jest.SpyInstance<Promise<Doctor[]>,[], any>;
+// let mockDoctordbGetAllDoctors : jest.SpyInstance<Promise<Doctor[]>,[], any>;
 
+let mockDoctordbGetDoctorById : jest.Mock;
+let mockDoctordbGetAllDoctors : jest.Mock;
 beforeEach(() =>{
-    mockDoctordbGetDoctorById = jest.spyOn(doctorDb, 'getDoctorById');
-    mockDoctordbGetAllDoctors = jest.spyOn(doctorDb,'getAllDoctors');
+    // mockDoctordbGetDoctorById = jest.spyOn(doctorDb, 'getDoctorById');
+    // mockDoctordbGetAllDoctors = jest.spyOn(doctorDb,'getAllDoctors');
+    mockDoctordbGetAllDoctors = jest.fn();
+
+    mockDoctordbGetDoctorById = jest.fn();
 });
 
 afterEach(() =>{
     jest.clearAllMocks();
 });
 
-test("given: a valid doctor id, when: get doctor by id, then: doctor with corresponding id is retrieved", () =>{
+test("given: a valid doctor id, when: get doctor by id, then: doctor with corresponding id is retrieved", async() =>{
+    // const doctorId = 5;
+
+    // mockDoctordbGetDoctorById.mockReturnValue(doctor);
+
+    // const result = doctorService.getDoctorById(5);
+
+    // expect(mockDoctordbGetDoctorById).toHaveBeenCalledWith({ id: doctorId });
+    // expect(result).toBe(doctor);
+    // expect(result?.getId()).toBe(doctorId);
+    // expect(result?.getUser()).toBe(userDoctor);
+    // expect(result?.getSpeciality()).toBe('Cardiology');
+    // expect(result?.getAvailability()).toBe(true);
     const doctorId = 5;
 
-    mockDoctordbGetDoctorById.mockReturnValue(doctor);
+    mockDoctordbGetDoctorById.mockResolvedValue(doctor);  // mockResolvedValue is used for promises
 
-    const result = doctorService.getDoctorById(5);
+    doctorDb.getDoctorById = mockDoctordbGetDoctorById;
 
+    const result = await doctorService.getDoctorById(doctorId);  // Use await to resolve the promise
+
+    // Verify the mock was called with the correct argument
     expect(mockDoctordbGetDoctorById).toHaveBeenCalledWith({ id: doctorId });
+
+    // Assertions on the resolved result (which will be a Doctor instance)
     expect(result).toBe(doctor);
     expect(result?.getId()).toBe(doctorId);
     expect(result?.getUser()).toBe(userDoctor);
@@ -91,11 +113,13 @@ test("given: a valid doctor id, when: get doctor by id, then: doctor with corres
 
 });
 
+
 test("given: a request to get all doctors, when: get all doctors, then: all the doctors are displayed.",async() =>{
     const allDoctors = [doctor, doctor2];
 
     mockDoctordbGetAllDoctors.mockResolvedValue(allDoctors);
     // mockDoctordbGetAllDoctors.mockReturnValue(allDoctors); // this was before orm prisma
+    doctorDb.getAllDoctors = mockDoctordbGetAllDoctors;
 
     const result = await doctorService.getAllDoctors();
 

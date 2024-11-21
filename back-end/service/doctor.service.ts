@@ -5,7 +5,7 @@ const getAllDoctors = async(): Promise<Doctor[]> =>{
     return doctorDb.getAllDoctors();
 };
 
-const getDoctorById = (id: number) : Doctor | null =>{
+const getDoctorById = async(id: number) : Promise<Doctor | null> =>{
     return doctorDb.getDoctorById({id});
 }
 

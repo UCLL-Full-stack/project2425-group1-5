@@ -36,24 +36,31 @@ const patient2 = new Patient({
     user: userPatient2
 });
 
-let mockPatientdbGetPatientById : jest.SpyInstance<Patient|null,[{id: number}], any>;
-let mockPatientdbGetAllPatients : jest.SpyInstance<Patient[],[]>;
+// let mockPatientdbGetPatientById : jest.SpyInstance<Patient|null,[{id: number}], any>;
+// let mockPatientdbGetAllPatients : jest.SpyInstance<Patient[],[]>;
+
+let mockPatientdbGetAllPatients : jest.Mock;
+let mockPatientdbGetPatientById : jest.Mock;
 
 beforeEach(() =>{
-    mockPatientdbGetAllPatients = jest.spyOn(patientDb, 'getAllPatients');
-    mockPatientdbGetPatientById = jest.spyOn(patientDb,'getPatientById');
+    // mockPatientdbGetAllPatients = jest.spyOn(patientDb, 'getAllPatients');
+    // mockPatientdbGetPatientById = jest.spyOn(patientDb,'getPatientById');
+    mockPatientdbGetAllPatients = jest.fn();
+    mockPatientdbGetPatientById = jest.fn();
 });
 
 afterEach(() =>{
     jest.clearAllMocks();
 });
 
-test("given: a valid patient id, when: get patient by id, then: patient with corresponding id is retrieved", () =>{
+test("given: a valid patient id, when: get patient by id, then: patient with corresponding id is retrieved", async() =>{
     const patientId = 8;
 
-    mockPatientdbGetPatientById.mockReturnValue(patient);
+    mockPatientdbGetPatientById.mockResolvedValue(patient);
 
-    const result = patientService.getPatientById(8);
+    patientDb.getPatientById = mockPatientdbGetPatientById;
+
+    const result = await patientService.getPatientById(8);
 
     expect(mockPatientdbGetPatientById).toHaveBeenCalledWith({ id: patientId });
     expect(result).toBe(patient);
@@ -62,12 +69,14 @@ test("given: a valid patient id, when: get patient by id, then: patient with cor
 
 });
 
-test("given: a request to get all patients, when: get all patients, then: all the patients are displayed.",() =>{
+test("given: a request to get all patients, when: get all patients, then: all the patients are displayed.",async() =>{
     const allPatients = [patient, patient2];
 
     mockPatientdbGetAllPatients.mockReturnValue(allPatients);
 
-    const result = patientService.getAllPatients();
+    patientDb.getAllPatients = mockPatientdbGetAllPatients;
+
+    const result = await patientService.getAllPatients();
 
     expect(mockPatientdbGetAllPatients).toHaveBeenCalled(); 
     expect(result).toEqual(allPatients);

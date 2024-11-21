@@ -28,11 +28,11 @@ const userDoctor =  new User({
 });
 
 const userInputPatient : UserInput = {
-    id: 8,
-    name: 'Sara Greene',
-    email: 'sara.greene@hospital.com',
-    password: 'sara123',
-    role: 'patient'
+    id: 5,
+     name: 'Ella Davis',
+    email: 'ella.davis@hospital.com',
+    password: 'ella123',
+    role: 'patient',
 };
 
 const userPatient =new User({
@@ -82,27 +82,36 @@ const doctor = new Doctor({
 });
 
 const patientInput : PatientInput= {
-    id: 8,
+    id: 5,
     user: userInputPatient
 };
 
 const patient = new Patient({
-    id: 8,
+    id: 5,
     user: userPatient
 });
 
 
-let mockAppointmentDbCreateAppointment : jest.SpyInstance<Appointment,[Appointment],any>;
-let mockAppointmentDbGetAppointmentByDoctorAndPatient : jest.SpyInstance<Appointment| undefined,[{doctorId : number, patientId: number}], any>;
+// let mockAppointmentDbCreateAppointment : jest.SpyInstance<Appointment,[Appointment],any>;
+// let mockAppointmentDbGetAppointmentByDoctorAndPatient : jest.SpyInstance<Appointment| undefined,[{doctorId : number, patientId: number}], any>;
 
-let mockDoctordbGetDoctorById : jest.SpyInstance<Doctor| null,[{id: number}], any>;
-let mockPatientdbGetPatientById : jest.SpyInstance<Patient| null,[{id: number}], any>;
+// let mockDoctordbGetDoctorById : jest.SpyInstance<Doctor| null,[{id: number}], any>;
+// let mockPatientdbGetPatientById : jest.SpyInstance<Patient| null,[{id: number}], any>;
+
+let mockAppointmentDbCreateAppointment : jest.Mock;
+let mockAppointmentDbGetAppointmentByDoctorAndPatient : jest.Mock;
+let mockDoctordbGetDoctorById : jest.Mock;
+let mockPatientdbGetPatientById : jest.Mock;
 
 beforeEach(() =>{
-    mockAppointmentDbCreateAppointment = jest.spyOn(appointmentDb, 'addAppointment');
-    mockDoctordbGetDoctorById = jest.spyOn(doctorDb, 'getDoctorById');
-    mockPatientdbGetPatientById = jest.spyOn(patientDb, 'getPatientById');
-    mockAppointmentDbGetAppointmentByDoctorAndPatient = jest.spyOn(appointmentDb, 'getAppointmentByDoctorAndPatient');
+    // mockAppointmentDbCreateAppointment = jest.spyOn(appointmentDb, 'addAppointment');
+    // mockDoctordbGetDoctorById = jest.spyOn(doctorDb, 'getDoctorById');
+    // mockPatientdbGetPatientById = jest.spyOn(patientDb, 'getPatientById');
+    // mockAppointmentDbGetAppointmentByDoctorAndPatient = jest.spyOn(appointmentDb, 'getAppointmentByDoctorAndPatient');
+    mockAppointmentDbCreateAppointment = jest.fn();
+    mockAppointmentDbGetAppointmentByDoctorAndPatient = jest.fn();
+    mockDoctordbGetDoctorById = jest.fn();
+    mockPatientdbGetPatientById = jest.fn();
 });
 
 afterEach(() =>{
@@ -111,16 +120,34 @@ afterEach(() =>{
 
 test('given: a valid appointment, when: appointment is created, then: appointment is created', async() =>{
     //given 
-    mockDoctordbGetDoctorById.mockReturnValue(doctor);
-    mockPatientdbGetPatientById.mockReturnValue(patient);
+    mockDoctordbGetDoctorById.mockResolvedValue(doctor);
+    mockPatientdbGetPatientById.mockResolvedValue(patient);
+
+    mockAppointmentDbGetAppointmentByDoctorAndPatient.mockResolvedValue(null); // No conflicting appointment
+    mockAppointmentDbCreateAppointment.mockResolvedValue(
+        new Appointment({
+            start_time,
+            end_time,
+            status,
+            date,
+            doctor,
+            patient,
+            location: appointmentLocation,
+        })
+    );
+
+    doctorDb.getDoctorById = mockDoctordbGetDoctorById;
+    patientDb.getPatientById = mockPatientdbGetPatientById;
+    appointmentDb.getAppointmentByDoctorAndPatient = mockAppointmentDbGetAppointmentByDoctorAndPatient;
+    appointmentDb.addAppointment = mockAppointmentDbCreateAppointment;
 
     //when
     await appointmentService.addAppointment({start_time, end_time, status, date, doctor: doctorInput,patient : patientInput, location: locationInput});
 
     //then
     expect(mockDoctordbGetDoctorById).toHaveBeenCalledWith({ id: 5 });
-    expect(mockPatientdbGetPatientById).toHaveBeenCalledWith({ id: 8});
-    expect(mockAppointmentDbGetAppointmentByDoctorAndPatient).toHaveBeenCalledWith({ doctorId: 5, patientId: 8});
+    expect(mockPatientdbGetPatientById).toHaveBeenCalledWith({ id: 5});
+    expect(mockAppointmentDbGetAppointmentByDoctorAndPatient).toHaveBeenCalledWith({ doctorId: 5, patientId: 5});
     expect(mockAppointmentDbCreateAppointment).toHaveBeenCalledTimes(1);
     expect(mockAppointmentDbCreateAppointment).toHaveBeenCalledWith(new Appointment({start_time, end_time, status, date,doctor, patient,location: appointmentLocation}));
 
@@ -128,9 +155,13 @@ test('given: a valid appointment, when: appointment is created, then: appointmen
 
 test('given: an existing appointment, when: appointment is created, then:an error is thrown', async() =>{
     //given
-    mockDoctordbGetDoctorById.mockReturnValue(doctor);
-    mockPatientdbGetPatientById.mockReturnValue(patient);
-    mockAppointmentDbGetAppointmentByDoctorAndPatient.mockReturnValue(new Appointment({start_time,end_time,status,date,doctor,patient,location: appointmentLocation}));
+    mockDoctordbGetDoctorById.mockResolvedValue(doctor);
+    mockPatientdbGetPatientById.mockResolvedValue(patient);
+    mockAppointmentDbGetAppointmentByDoctorAndPatient.mockResolvedValue(new Appointment({start_time,end_time,status,date,doctor,patient,location: appointmentLocation}));
+
+    doctorDb.getDoctorById = mockDoctordbGetDoctorById;
+    patientDb.getPatientById = mockPatientdbGetPatientById;
+    appointmentDb.getAppointmentByDoctorAndPatient = mockAppointmentDbGetAppointmentByDoctorAndPatient;
 
     //when
     const addAppointment = appointmentService.addAppointment({start_time,end_time,status,date,doctor: doctorInput,patient: patientInput, location: locationInput});
@@ -179,7 +210,9 @@ test('given:patient id not found, when: appointment is created, then:an error is
         user: userInputPatient
     };
 
-    mockPatientdbGetPatientById.mockReturnValue(null);
+    mockPatientdbGetPatientById.mockResolvedValue(null);
+
+    patientDb.getPatientById = mockPatientdbGetPatientById;
     //when
     const addAppointment = appointmentService.addAppointment({start_time,end_time,status,date,doctor: doctorInput,patient: nonExistentPatientInput, location : locationInput});
 

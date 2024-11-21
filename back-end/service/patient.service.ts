@@ -2,10 +2,10 @@ import { Patient } from "../model/Patient";
 import patientDb from "../repository/patient.db";
 
 
-const getAllPatients = (): Patient[] =>{
+const getAllPatients = async(): Promise<Patient[]> =>{
     return patientDb.getAllPatients();
 };
-const getPatientById = (id: number) : Patient | null =>{
+const getPatientById = async(id: number) : Promise<Patient | null> =>{
     return patientDb.getPatientById({id});
 }
 

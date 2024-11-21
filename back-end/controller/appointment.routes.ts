@@ -78,13 +78,13 @@ import { AppointmentInput } from '../types';
  */
 const appointmentRouter = express.Router();
 appointmentRouter.post('/', async(req:Request, res: Response)=>{
-    try{
+    // try{
         const appointment = <AppointmentInput>req.body;
         const result = await appointmentService.addAppointment(appointment);
         res.status(200).json(result);
-    }catch(error){
-        res.status(400).json({status:'error'});
-    }
+    // }catch(error){
+    //     res.status(400).json({status:'error'});
+    // }
 })
 
 /**
