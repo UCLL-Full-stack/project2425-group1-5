@@ -10,6 +10,25 @@ const addAppointment = (appointment: Appointment) => {
     });
 };
 
+const updateAppointment = (appointmentId: string, appointment: Appointment)=>{
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/appointments/${appointmentId}`,{
+        method : "PUT",
+        headers : {
+            "Content-Type" : "application/json",
+        },
+        body : JSON.stringify(appointment),
+    });
+};
+
+const deleteAppointment = (appointmentId : string) =>{
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/appointments/${appointmentId}`,{
+        method : "DELETE",
+        headers : {
+            "Content-Type": "application/json",
+        },
+    });
+};
+
 const getAllAppointments = async() =>{
     return fetch(
         process.env.NEXT_PUBLIC_API_URL + "/appointments",
@@ -24,7 +43,9 @@ const getAllAppointments = async() =>{
 
 const AppointmentService ={
     addAppointment,
-    getAllAppointments
+    getAllAppointments,
+    deleteAppointment,
+    updateAppointment
 };
 
 export default AppointmentService;

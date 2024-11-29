@@ -110,4 +110,48 @@ const addAppointment = async ({ start_time, end_time, status, date, doctor, pati
     return createdAppointment;
 };
 
-export default { addAppointment, getUpcomingAppointments, getAllAppointments, getAppointmentById}
+const updateAppointment = async(id: number, updatedData : AppointmentInput) : Promise<Appointment | null> => {
+    const existingAppointment = await getAppointmentById(id);
+    if (!existingAppointment) {
+        throw new Error(`Appointment with ID ${id} not found.`);
+    }
+
+    if (updatedData.doctor?.id) {
+        const updatedDoctor = await doctorDb.getDoctorById({ id: updatedData.doctor.id });
+        if (!updatedDoctor) {
+            throw new Error('Doctor not found with the given ID.');
+        }
+    }
+
+    if (updatedData.patient?.id) {
+        const updatedPatient = await patientDb.getPatientById({ id: updatedData.patient.id });
+        if (!updatedPatient) {
+            throw new Error('Patient not found with the given ID.');
+        }
+    }
+
+    if (updatedData.location?.id) {
+        const updatedLocation = await appointmentLocationDb.getAppointmentLocationById({ id: updatedData.location.id });
+        if (!updatedLocation) {
+            throw new Error('Location not found with the given ID.');
+        }
+    }
+    const savedAppointment = await appointmentDb.updateAppointment(id, updatedData);
+
+    return savedAppointment;
+    
+}
+
+const deleteAppointment = async(id: number) : Promise<String> =>{
+    const existingAppointment = await appointmentDb.getAppointmentById({id});
+    if(!existingAppointment){
+        throw new Error(`Appointment with ID ${id} not found.`);
+    }
+
+    await appointmentDb.deleteAppointment({id});
+
+    return "The appointment was cancelled successfully.";
+}
+
+
+export default { addAppointment, getUpcomingAppointments, getAllAppointments, getAppointmentById, updateAppointment, deleteAppointment}

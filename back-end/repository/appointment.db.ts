@@ -239,10 +239,51 @@ const addAppointment = async (appointment: Appointment): Promise<Appointment> =>
     }
 };
 
-// const updateAppointment = (appointmentId: number) =>{
-//    const existingAppointment =  appointments.findIndex((appt) =>appt.getId()!== undefined && appt.getId === appointmentId)
-// }
+const updateAppointment = async(id: number, updatedData :AppointmentInput) : Promise<Appointment | null> =>{
+    try{
 
+        const updatedAppointment = await database.appointment.update({
+            where: {id},
+            data : {
+                ...(updatedData.start_time && {start_time : updatedData.start_time}),
+                ...(updatedData.end_time && {end_time : updatedData.end_time}),
+                ...(updatedData.status && {status : updatedData.status}),
+                ...(updatedData.date && {date : updatedData.date}),
+                ...(updatedData.doctor && 
+                    {doctor : {
+                        connect : {id: updatedData.doctor.id},
+                    }}),
+                ...(updatedData.patient && 
+                    {patient : {
+                        connect : {id: updatedData.patient.id},
+                    }}),
+                ...(updatedData.location && 
+                    {location : {
+                        connect : {id: updatedData.location.id},
+                    }}),                
+            },
+            include: {
+                doctor: {
+                    include: {
+                        user: true,
+                        service: true,
+                    },
+                },
+                patient: {
+                    include: {
+                        user: true,
+                    },
+                },
+                location: true,
+            },
+        
+        });
+        return updatedAppointment ? Appointment.from(updatedAppointment): null;
+    }catch (error) {
+        console.error(error);
+        throw new Error('Failed to update appointment. Please check the server log for more details.');
+    }
+}
 
 // const getAppointmentByDoctorAndPatient = ({
 //     doctorId,
@@ -319,10 +360,26 @@ const getAppointmentById = async({id}:{id:number}): Promise<Appointment|null> =>
         throw new Error('Database error. See server log for details.');
     }
 }
+
+const deleteAppointment = async({id}:{id: number}) : Promise<String> =>{
+    try{
+        await database.appointment.delete({
+            where : {id}
+        });
+
+        return "The appointment was cancelled successfully."
+    }catch(error){
+        console.log(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     getAllAppointments,
     addAppointment,
     getAppointmentByDoctorAndPatient,
-    getAppointmentById
+    getAppointmentById,
+    updateAppointment,
+    deleteAppointment
 
 };

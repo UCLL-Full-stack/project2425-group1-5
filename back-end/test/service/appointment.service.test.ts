@@ -220,7 +220,47 @@ test('given:patient id not found, when: appointment is created, then:an error is
     await expect(addAppointment).rejects.toThrow('Patient not found with the given ID.');
 });
 
+// test('given : a valid input, when: appointment is veing updated, then: appointment is updated', async()=>{
+//     const mockGetAppointmentById = jest.fn().mockResolvedValue(
+//         new Appointment({ start_time, end_time, status, date, doctor, patient, location: appointmentLocation })
+//     );
+//     const mockUpdateAppointment = jest.fn().mockResolvedValue(
+//         new Appointment({ start_time, end_time, status: 'Completed', date, doctor, patient, location: appointmentLocation })
+//     );
 
+//     const mockDoctordbGetDoctorById = jest.fn().mockResolvedValue(doctor);
+
+//     const mockPatientdbGetPatientById = jest.fn().mockResolvedValue(patient);
+
+//     appointmentDb.getAppointmentById = mockGetAppointmentById;
+//     appointmentDb.updateAppointment = mockUpdateAppointment;
+//     doctorDb.getDoctorById = mockDoctordbGetDoctorById;
+//     patientDb.getPatientById = mockPatientdbGetPatientById;
+
+//     const result = await appointmentService.updateAppointment(1, {
+//         start_time,
+//         end_time,
+//         status: 'Completed',
+//         date,
+//         doctor: doctorInput,
+//         patient: patientInput,
+//         location: locationInput,
+//     });
+
+//     expect(result?.getStatus()).toBe('Completed');
+//     expect(mockGetAppointmentById).toHaveBeenCalledWith(1);
+//     expect(mockUpdateAppointment).toHaveBeenCalledWith(1, {
+//         start_time,
+//         end_time,
+//         status: 'Completed',
+//         date,
+//         doctor: doctorInput,
+//         patient: patientInput,
+//         location: locationInput,
+//     });
+//     expect(mockDoctordbGetDoctorById).toHaveBeenCalledWith({ id: doctorInput.id });
+//     expect(mockPatientdbGetPatientById).toHaveBeenCalledWith({ id: patientInput.id });
+// })
 
 
 

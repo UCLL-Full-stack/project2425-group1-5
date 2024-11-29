@@ -45,3 +45,76 @@ button {
     padding: 0.5rem 1rem;
     font-weight: bold;
 }
+
+form {
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid #3b82f6; /* Blue outline */
+    padding: 2rem;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+input {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: #3b82f6; /* Blue border on focus */
+    outline: none;
+}
+
+/* Login button */
+form button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #3b82f6; /* Blue background */
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: #2563eb; /* Slightly darker blue on hover */
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Error message styling */
+.text-red-800 {
+    color: #e11d48; /* Red color for error */
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.status-message-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    margin-top: 1rem; /* Adds space below the heading */
+}
+
+.success-message {
+    font-size: 1rem; /* Optional: Adjust size */
+    font-weight: bold; /* Optional: Make it bold */
+    color: #16a34a; /* Green color */
+}
+
+.text-center {
+    padding-top: 2rem; 
+}
+
+.login-heading {
+    padding-top: 2rem;
+}
