@@ -3,12 +3,17 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import Header from "@/components/header";
+import { useTranslation } from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
+
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <>
       <Head>
-        <title>MediAsist</title>
+        <title>{t('app.title')}</title>
         <meta name="description" content="MediAsist app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -36,6 +41,14 @@ const Home: React.FC = () => {
     </>
   );
 };
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const {locale} = context;
 
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
+};
 export default Home;
 

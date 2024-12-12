@@ -32,6 +32,8 @@ import patientService from '../service/patient.service';
  * @swagger
  * /patients:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all patients.
  *     responses:
  *       "200":
@@ -56,6 +58,8 @@ patientRouter.get('/', async(req:Request, res: Response)=>{
  * @swagger
  * /patients/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of patients by given id.
  *     parameters:
  *        - in : path

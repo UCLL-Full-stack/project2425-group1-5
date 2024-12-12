@@ -9,6 +9,7 @@ import { User } from "../../model/User";
 import appointmentService from "../../service/appointment.service";
 import { Service } from "../../model/Service";
 import { AppointmentLocation } from "../../model/AppointmentLocation";
+import appointmentLocationDb from "../../repository/appointmentLocation.db";
 
 const start_time =new Date('2024-12-05T09:00:00');
 const end_time =  new Date('2024-12-05T10:00:00');
@@ -52,14 +53,14 @@ const service = new Service({
 }); 
 
 const locationInput : LocationInput = {
-    id: 2,
+    id: 6,
     street_number: 456,
     city: "Los Angeles",
     postal_code: 90001
 }
 
 const appointmentLocation = new AppointmentLocation({
-    id: 2,
+    id: 6,
     street_number: 456,
     city: "Los Angeles",
     postal_code: 90001
@@ -102,6 +103,7 @@ let mockAppointmentDbCreateAppointment : jest.Mock;
 let mockAppointmentDbGetAppointmentByDoctorAndPatient : jest.Mock;
 let mockDoctordbGetDoctorById : jest.Mock;
 let mockPatientdbGetPatientById : jest.Mock;
+let mockAppointmentLocationdbGetAppointmentLocationById : jest.Mock;
 
 beforeEach(() =>{
     // mockAppointmentDbCreateAppointment = jest.spyOn(appointmentDb, 'addAppointment');
@@ -112,6 +114,7 @@ beforeEach(() =>{
     mockAppointmentDbGetAppointmentByDoctorAndPatient = jest.fn();
     mockDoctordbGetDoctorById = jest.fn();
     mockPatientdbGetPatientById = jest.fn();
+    mockAppointmentLocationdbGetAppointmentLocationById = jest.fn();
 });
 
 afterEach(() =>{
@@ -122,6 +125,8 @@ test('given: a valid appointment, when: appointment is created, then: appointmen
     //given 
     mockDoctordbGetDoctorById.mockResolvedValue(doctor);
     mockPatientdbGetPatientById.mockResolvedValue(patient);
+    mockAppointmentLocationdbGetAppointmentLocationById.mockResolvedValue(appointmentLocation);
+
 
     mockAppointmentDbGetAppointmentByDoctorAndPatient.mockResolvedValue(null); // No conflicting appointment
     mockAppointmentDbCreateAppointment.mockResolvedValue(
@@ -138,6 +143,7 @@ test('given: a valid appointment, when: appointment is created, then: appointmen
 
     doctorDb.getDoctorById = mockDoctordbGetDoctorById;
     patientDb.getPatientById = mockPatientdbGetPatientById;
+    appointmentLocationDb.getAppointmentLocationById = mockAppointmentLocationdbGetAppointmentLocationById;
     appointmentDb.getAppointmentByDoctorAndPatient = mockAppointmentDbGetAppointmentByDoctorAndPatient;
     appointmentDb.addAppointment = mockAppointmentDbCreateAppointment;
 
@@ -147,6 +153,7 @@ test('given: a valid appointment, when: appointment is created, then: appointmen
     //then
     expect(mockDoctordbGetDoctorById).toHaveBeenCalledWith({ id: 5 });
     expect(mockPatientdbGetPatientById).toHaveBeenCalledWith({ id: 5});
+    expect(mockAppointmentLocationdbGetAppointmentLocationById).toHaveBeenCalledWith({id: 6});
     expect(mockAppointmentDbGetAppointmentByDoctorAndPatient).toHaveBeenCalledWith({ doctorId: 5, patientId: 5});
     expect(mockAppointmentDbCreateAppointment).toHaveBeenCalledTimes(1);
     expect(mockAppointmentDbCreateAppointment).toHaveBeenCalledWith(new Appointment({start_time, end_time, status, date,doctor, patient,location: appointmentLocation}));

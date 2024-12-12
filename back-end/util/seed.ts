@@ -6,11 +6,11 @@ import { connect } from "http2";
 const prisma = new PrismaClient();
 
 const main = async() =>{
+    await prisma.appointment.deleteMany();
     await prisma.doctor.deleteMany();
     await prisma.patient.deleteMany();
     await prisma.admin.deleteMany();
     await prisma.user.deleteMany();
-    await prisma.appointment.deleteMany();
     await prisma.appointmentLocation.deleteMany();
     await prisma.service.deleteMany();
 
@@ -70,7 +70,7 @@ const main = async() =>{
                 create : {
                     name: 'Dr. John Smith',
                     email: 'john.smith@hospital.com',
-                    password: 'smith123',
+                    password: await bcrypt.hash('smith123', 12),
                     role: 'doctor',
                 }
             },
@@ -88,7 +88,7 @@ const main = async() =>{
                 create : {
                     name: 'Dr. Emily Jones',
                     email: 'emily.jones@hospital.com',
-                    password: 'jones123',
+                    password: await bcrypt.hash('jones123', 12),
                     role: 'doctor',
                 }
             },
@@ -106,7 +106,7 @@ const main = async() =>{
                 create : {
                     name: 'Dr. Michel Brown',
                     email: 'michael.brown@hospital.com',
-                    password: 'brown123',
+                    password: await bcrypt.hash('brown123', 12),
                     role: 'doctor',
                 }
             },
@@ -124,7 +124,7 @@ const main = async() =>{
                 create : {
                     name: 'Dr. Sarah Wilson',
                     email: 'sarah.wilson@hospital.com',
-                    password: 'wilson123',
+                    password: await bcrypt.hash('wilson123', 12),
                     role: 'doctor',
                 }
             },
@@ -142,7 +142,7 @@ const main = async() =>{
                 create : {
                     name: 'Dr. David Miller',
                     email: 'david.miller@hospital.com',
-                    password: 'miller123',
+                    password:await bcrypt.hash('miller123', 12),
                     role: 'doctor',
                 }
             },
@@ -160,7 +160,7 @@ const main = async() =>{
                 create : {
                     name: 'Alice Johnson',
                     email: 'alice.johnson@hospital.com',
-                    password: 'alice123',
+                    password: await bcrypt.hash('alice123', 12),
                     role: 'patient',
                 }
             },
@@ -173,7 +173,7 @@ const main = async() =>{
                 create : {
                     name: 'Bob Williams',
                     email: 'bob.williams@hospital.com',
-                    password: 'bob123',
+                    password: await bcrypt.hash('bob123', 12),
                     role: 'patient',
                 }
             },
@@ -186,7 +186,7 @@ const main = async() =>{
                 create : {
                     name: 'Carla Brown',
                     email: 'carla.brown@hospital.com',
-                    password: 'carla123',
+                    password: await bcrypt.hash('carla123', 12),
                     role: 'patient',
                 }
             },
@@ -199,7 +199,7 @@ const main = async() =>{
                 create : {
                     name: 'David Smith',
                     email: 'david.smith@hospital.com',
-                    password: 'david123',
+                    password: await bcrypt.hash('david123', 12),
                     role: 'patient',
                 }
             },
@@ -212,7 +212,7 @@ const main = async() =>{
                 create : {
                     name: 'Ella Davis',
                     email: 'ella.davis@hospital.com',
-                    password: 'ella123',
+                    password: await bcrypt.hash('ella123', 12),
                     role: 'patient',
                 }
             },
@@ -225,7 +225,7 @@ const main = async() =>{
                 create : {
                     name: 'Sophia Turner',
                     email: 'sophia.turner@hospital.com',
-                    password: 'sophia123',
+                    password: await bcrypt.hash('sophia123', 12),
                     role: 'admin',
                 }
             },
@@ -237,7 +237,7 @@ const main = async() =>{
                 create : {
                     name: 'Liam Johnson',
                     email: 'liam.johnson@hospital.com',
-                    password: 'liam456',
+                    password: await bcrypt.hash('liam456', 12),
                     role: 'admin',
                 }
             },
@@ -250,7 +250,7 @@ const main = async() =>{
                 create : {
                     name: 'Olivia Martinez',
                     email: 'olivia.martinez@hospital.com',
-                    password: 'olivia789',
+                    password: await bcrypt.hash('olivia789', 12),
                     role: 'admin',
                 }
             },

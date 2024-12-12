@@ -1,25 +1,57 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Appointment } from "@/types";
+import { Appointment, User } from "@/types";
 import AppointmentService from "@/services/AppointmentService";
 import Head from "next/head";
 import Header from "@/components/header";
 import AppointmentOverview from "@/components/appointment/AppointmentOverview";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
+import useSWR, { mutate } from "swr";
+import useInterval from "use-interval";
 
 const Appointments: React.FC =() =>{
     const [appointments, setAppointments] = useState<Array<Appointment>>();
     const [selectAppointment , setSelectedAppointment] = useState<Appointment | null>(null);
+    const [errorss, setErrorss] = useState<string>();
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
 
-    useEffect(() =>{
-        getAppointments();
-    },[]);
+    useEffect(()=>{
+        setLoggedInUser(JSON.parse(localStorage.getItem("loggedInUser")!));
+    }, []);
+    // useEffect(() =>{
+    //     getAppointments();
+    // },[]);
 
     const getAppointments = async() =>{
+        setErrorss("");
         const response = await AppointmentService.getAllAppointments();
-        const appointmentss =  await response.json();
-        setAppointments(appointmentss);
-    }
+        
+        if(!response.ok){
+            if(response.status ===401){
+                setErrorss("You are not authorized to view this page.Please login first.");
+            }else{
+                setErrorss(response.statusText);
+            }
+        }else{
+
+            const appointmentss =  await response.json();
+            setAppointments(appointmentss);
+        }
+    };
+
+    
+    const { data, isLoading, error } = useSWR(
+        "getAppointments",
+        getAppointments
+    );
+    
+    useInterval(()=>{
+        mutate("getAppointments", getAppointments());
+    },1000);
+    
+
 
     return(
         <>
@@ -72,6 +104,16 @@ const Appointments: React.FC =() =>{
     );
 
 
-}
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const {locale} = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+};
 
 export default Appointments;

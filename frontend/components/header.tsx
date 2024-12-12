@@ -1,16 +1,20 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'next-i18next';
+import Language from './language/Language';
+import { User } from '@/types';
 
 const Header: React.FC = () => {
 
-  const[loggedInUser, setLoggedInUser] = useState<string | null>(null);
-  useEffect(()=>{
-    setLoggedInUser(sessionStorage.getItem("loggedInUser"));
-  },[]);
+  const[loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const { t } = useTranslation();
 
+  useEffect(() => {
+    setLoggedInUser(JSON.parse(localStorage.getItem("loggedInUser")!))
+  }, []);
   const handleClick = () =>{
-    sessionStorage.removeItem("loggedInUser");
+    localStorage.removeItem("loggedInUser");
 
     setLoggedInUser(null);
   }
@@ -29,20 +33,24 @@ const Header: React.FC = () => {
             </div>
       <nav className="nav justify-content-center">
         <Link href="/" className="nav-link px-4 fs-3 text-blue">
-          Home
+          {/* Home */}
+          {t('login.header.nav.home')}
         </Link>
         <Link href="/doctors" className="nav-link px-4 fs-3 text-blue">
-          Doctors
+          {/* Doctors */}
+          {t('login.header.nav.doctors')}
         </Link>
         <Link href="/appointments" className="nav-link px-4 fs-3 text-blue">
-          Appointments
+          {/* Appointments */}
+          {t('login.header.nav.appointments')}
         </Link>
         {!loggedInUser &&
         (<Link
            href= "/login"
           className="nav-link px-4 fs-3 text-blue hover:bg-gray-600 rounded-lg"
           >
-           Login
+           {/* Login */}
+           {t('login.header.nav.login')}
         </Link>
         )}
         {loggedInUser && 
@@ -51,12 +59,16 @@ const Header: React.FC = () => {
           onClick={handleClick}
           className="nav-link px-4 fs-3 text-blue hover:bg-gray-600 rounded-lg"
           >
-            Logout
+            {/* Logout */}
+            {t('login.header.nav.logout')}
           </a>
           }
-          {loggedInUser &&<div className="nav-link px-4 fs-3 text-blue">
-            Welcome, {loggedInUser}!
+          {loggedInUser &&
+          <div className="nav-link px-4 fs-3 text-blue">
+            {/* Welcome, {loggedInUser}! */}
+                        {`${t("login.header.welcome")}, ${loggedInUser?.name || ""}!`}
           </div>}
+          <Language/>
       </nav>
     </header>
   );

@@ -30,12 +30,15 @@ const deleteAppointment = (appointmentId : string) =>{
 };
 
 const getAllAppointments = async() =>{
+    const token = JSON.parse(localStorage.getItem("loggedInUser")|| "null")?.token;
+
     return fetch(
         process.env.NEXT_PUBLIC_API_URL + "/appointments",
         {
             method : "GET",
             headers : {
-                "Content-Type" : "application/json"
+                "Content-Type" : "application/json",
+                Authorization: `Bearer ${token}`,
             }
         }
     );

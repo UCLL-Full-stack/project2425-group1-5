@@ -1,0 +1,27 @@
+{
+    "app.title": "MediAssist",
+    "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
+    "login": {
+        "title": "Login",
+        "button": "Login",
+        "success": "Login succesvol. Terug naar homepage..",
+        "validate": {
+            "name": "Naam is verplicht",
+            "password": "Wachtwoord is vereist"
+        },
+        "label": {
+            "username":  "Gebruikersnaam:",
+            "password": "Wachtwoord:"
+        },
+        "header": {
+            "welcome":"Welkom",
+            "nav": {
+                "home": "Home",
+                "doctors": "Artsen",
+                "appointments": "Afspraak",
+                "login": "Login",
+                "logout": "Logout"
+            }
+        }
+    }
+}

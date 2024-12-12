@@ -5,10 +5,13 @@ import DoctorService from "@/services/DoctorService";
 import { useEffect } from "react";
 import { useState } from "react";
 import DoctorOverview from "@/components/doctors/DoctorOverview";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
 const Doctors: React.FC = () =>{
 
     const [doctors, setDoctors] = useState<Array<Doctor>>();
+    const [error, setError] = useState<string>();
     const [selectDoctor , setSelectedDoctor] = useState<Doctor | null>(null);
 
     useEffect(() =>{
@@ -16,10 +19,20 @@ const Doctors: React.FC = () =>{
     },[]);
 
     const getDoctors = async() =>{
+        setError("");
         const response = await DoctorService.getAllDoctors();
-        const doctorss =  await response.json();
-        setDoctors(doctorss);
-    }
+        if(!response.ok){
+            if(response.status === 401){
+                setError("You are not authorized to view this page.Please login first.")
+            }else{
+                setError(response.statusText);
+            }
+        } else{
+            const doctorss =  await response.json();
+            setDoctors(doctorss);
+        }
+
+    };
 
     return(
         <>
@@ -61,6 +74,17 @@ const Doctors: React.FC = () =>{
         
 
     );
-}
+};
+
+export const getServerSideProps : GetServerSideProps= async (context) => {
+    const {locale} = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+};
+
 
 export default Doctors;

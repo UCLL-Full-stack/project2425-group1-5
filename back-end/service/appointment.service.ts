@@ -70,6 +70,9 @@ const addAppointment = async ({ start_time, end_time, status, date, doctor, pati
     if (!patient?.id) {
         throw new Error('Patient id is required.');
     }
+    if(!location?.id){
+        throw new Error('Appointment location id is required.');
+    }
 
     // Retrieve the doctor, patient, and location from the database
     const addedDoctor = await doctorDb.getDoctorById({ id: doctor.id });
@@ -82,7 +85,7 @@ const addAppointment = async ({ start_time, end_time, status, date, doctor, pati
         throw new Error('Patient not found with the given ID.');
     }
 
-    const addedLocation = await appointmentLocationDb.getAppointmentLocationById({ id: location.id! });
+    const addedLocation = await appointmentLocationDb.getAppointmentLocationById({ id: location.id });
     if (!addedLocation) {
         throw new Error('Location not found with the given ID.');
     }

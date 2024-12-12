@@ -366,6 +366,7 @@ const deleteAppointment = async({id}:{id: number}) : Promise<String> =>{
         await database.appointment.delete({
             where : {id}
         });
+        
 
         return "The appointment was cancelled successfully."
     }catch(error){

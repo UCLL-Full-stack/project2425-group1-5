@@ -47,7 +47,11 @@ type AppointmentInput = {
     patient : PatientInput;
     location : LocationInput
 }
-
+type AuthenticationResponse = {
+    token: string;
+    name: string;
+    role: Role;
+};
 export {
     Role,
     LocationInput,
@@ -55,5 +59,6 @@ export {
     UserInput,
     DoctorInput,
     PatientInput,
-    AppointmentInput
+    AppointmentInput,
+    AuthenticationResponse
 };

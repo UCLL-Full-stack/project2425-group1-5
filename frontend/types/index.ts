@@ -3,10 +3,10 @@ type Role = 'admin' | 'doctor' | 'patient';
 
 export type User ={
     id?: number;
-    name: string;
-    email:string;
-    password: string;
-    role: Role;
+    name?: string;
+    email?:string;
+    password?: string;
+    role?: Role;
 };
 
 export type Doctor = {

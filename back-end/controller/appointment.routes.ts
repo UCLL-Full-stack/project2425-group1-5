@@ -49,6 +49,12 @@
  *                  id:
  *                    type: number
  *                    format: int64
+ *            location:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                   type: number
+ *                   format: int64
 
  */
 
@@ -61,6 +67,8 @@ import { AppointmentInput } from '../types';
  * @swagger
  * /appointments:
  *   post:
+ *      security:
+ *       - bearerAuth : []
  *      summary : Create a new appointment for existing doctor and patient.
  *      requestBody:
  *        required: true
@@ -83,6 +91,7 @@ appointmentRouter.post('/', async(req:Request, res: Response)=>{
         const result = await appointmentService.addAppointment(appointment);
         res.status(200).json(result);
     }catch(error){
+        console.log(error);
         res.status(400).json({status:'error'});
     }
 })
@@ -91,6 +100,8 @@ appointmentRouter.post('/', async(req:Request, res: Response)=>{
  * @swagger
  * /upcomingAppointments:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all upcoming appointments.
  *     responses:
  *       "200":
@@ -113,6 +124,8 @@ appointmentRouter.get('/', async(req: Request, res: Response)=>{
  * @swagger
  * /appointments:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all appointments.
  *     responses:
  *       "200":
@@ -135,6 +148,8 @@ appointmentRouter.get('/', async(req:Request, res: Response)  =>{
  * @swagger
  * /appointments/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of appointments by given id.
  *     parameters:
  *        - in : path
@@ -166,6 +181,8 @@ appointmentRouter.get('/' , async(req: Request, res: Response)=>{
  * @swagger
  * /appointments/{id}:
  *   put:
+ *     security:
+ *       - bearerAuth: []
  *     summary : Update an appointment by its id
  *     parameters:
  *        - in : path
@@ -204,6 +221,8 @@ appointmentRouter.put('/:id', async(req:Request, res: Response)=>{
  * @swagger
  * /appointments/{id}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary : Delete an appointment by its id
  *     parameters:
  *        - in : path
