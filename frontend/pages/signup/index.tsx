@@ -4,21 +4,21 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head"
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
+import UserSignUpForm from "@/components/users/UserSignUpForm";
 
 
 
-const Login: React.FC = () =>{
+const SignUp: React.FC = () =>{
     const { t } = useTranslation();
     return (
         <>
            <Head>
-            <title>User Login</title>
+            <title>User signup</title>
            </Head>
            <Header />
            <main>
            <section className="p-6 min-h-screen flex flex-col items-center">
-              <UserLoginForm />
+              <UserSignUpForm />
             </section>
            </main>
         </>
@@ -35,4 +35,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-export default Login;
+export default SignUp;

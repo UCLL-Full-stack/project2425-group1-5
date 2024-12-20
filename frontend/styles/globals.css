@@ -54,6 +54,8 @@ form {
     max-width: 400px;
     margin: 0 auto;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    
 }
 input {
     width: 100%;
@@ -117,4 +119,40 @@ button:focus {
 
 .login-heading {
     padding-top: 2rem;
+}
+
+.schedule-appointment-btn {
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    background-color: rgb(141, 189, 86); /* Green background */
+    color: white;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.schedule-appointment-btn:hover {
+    background-color: rgb(84, 157, 0); /* Slightly darker blue on hover */
+}
+
+.delete-appointment-btn {
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    background-color:#e11d48; 
+    color: white;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.delete-appointment-btn{
+    background-color: #f30035;
+}
+
+.filter-appointment-btn{
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    background-color:#2563eb;; 
+    color: white;
+    transition: background-color 0.3s ease;
+    border: none;
+    margin-bottom: 2rem;
 }

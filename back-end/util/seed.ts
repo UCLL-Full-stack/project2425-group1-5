@@ -299,41 +299,41 @@ const main = async() =>{
         },
     });
 
-    const appointment2 = await prisma.appointment.create({
-        data : {
-            start_time:  set(addDays(new Date(), 5), { hours: 14, minutes: 0 }),
-            end_time: set(addDays(new Date(), 5), { hours: 15, minutes: 0 }),
-            status: 'Scheduled',
-            date: addDays(new Date(), 5),
-            doctor: {
-                connect : {id : doctor2.id}
-            },
-            patient: {
-                connect : {id : patient2.id}
-            },
-            location : {
-                connect : {id : appointmentLocation2.id}
-            }
+    // const appointment2 = await prisma.appointment.create({
+    //     data : {
+    //         start_time:  set(addDays(new Date(), 5), { hours: 14, minutes: 0 }),
+    //         end_time: set(addDays(new Date(), 5), { hours: 15, minutes: 0 }),
+    //         status: 'Scheduled',
+    //         date: addDays(new Date(), 5),
+    //         doctor: {
+    //             connect : {id : doctor2.id}
+    //         },
+    //         patient: {
+    //             connect : {id : patient2.id}
+    //         },
+    //         location : {
+    //             connect : {id : appointmentLocation2.id}
+    //         }
 
-        },
-    });
-    const appointment3 = await prisma.appointment.create({
-        data : {
-            start_time:set(subDays(new Date(), 10), { hours: 9, minutes: 0 }),
-            end_time:set(subDays(new Date(), 10), { hours: 10, minutes: 0 }),
-            status: 'Completed',
-            date: subDays(new Date(), 10),
-            doctor: {
-                connect : {id : doctor1.id}
-            },
-            patient: {
-                connect : {id : patient2.id}
-            },
-            location : {
-                connect : {id : appointmentLocation3.id}
-            }
-        },
-    });
+    //     },
+    // });
+    // const appointment3 = await prisma.appointment.create({
+    //     data : {
+    //         start_time:set(subDays(new Date(), 10), { hours: 9, minutes: 0 }),
+    //         end_time:set(subDays(new Date(), 10), { hours: 10, minutes: 0 }),
+    //         status: 'Completed',
+    //         date: subDays(new Date(), 10),
+    //         doctor: {
+    //             connect : {id : doctor1.id}
+    //         },
+    //         patient: {
+    //             connect : {id : patient2.id}
+    //         },
+    //         location : {
+    //             connect : {id : appointmentLocation3.id}
+    //         }
+    //     },
+    // });
 
 
 

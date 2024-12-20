@@ -1,7 +1,7 @@
-const getAllDoctors = async() =>{
+const getAllPatients = async() =>{
     const token = JSON.parse(localStorage.getItem("loggedInUser")|| "null")?.token;
     return fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/doctors",
+        process.env.NEXT_PUBLIC_API_URL + "/patients",
         {
             method : "GET",
             headers : {
@@ -12,10 +12,10 @@ const getAllDoctors = async() =>{
     );
 };
 
-const getDoctorById = (doctorId : String) =>{
+const getPatientById = (patientId : String) =>{
     const token = JSON.parse(localStorage.getItem("loggedInUser")|| "null")?.token;
 
-    return fetch(process.env.NEXT_PUBLIC_API_URL + `/doctors/${doctorId}`,{
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/patients/${patientId}`,{
        method : "GET",
        headers : {
           "Content-Type" : "application/json",
@@ -27,9 +27,9 @@ const getDoctorById = (doctorId : String) =>{
  
 
 
-const DoctorService = {
-    getAllDoctors,
-    getDoctorById
+const PatientService = {
+    getAllPatients,
+    getPatientById
 };
 
-export default DoctorService;
+export default PatientService;

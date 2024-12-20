@@ -104,6 +104,9 @@ let mockAppointmentDbGetAppointmentByDoctorAndPatient : jest.Mock;
 let mockDoctordbGetDoctorById : jest.Mock;
 let mockPatientdbGetPatientById : jest.Mock;
 let mockAppointmentLocationdbGetAppointmentLocationById : jest.Mock;
+let mockAppointmentDbGetAppointmentById : jest.Mock;
+let mockAppointmentDbUpdateAppointment : jest.Mock;
+let mockAppointmentDbDeleteAppointment : jest.Mock;
 
 beforeEach(() =>{
     // mockAppointmentDbCreateAppointment = jest.spyOn(appointmentDb, 'addAppointment');
@@ -115,6 +118,9 @@ beforeEach(() =>{
     mockDoctordbGetDoctorById = jest.fn();
     mockPatientdbGetPatientById = jest.fn();
     mockAppointmentLocationdbGetAppointmentLocationById = jest.fn();
+    mockAppointmentDbGetAppointmentById = jest.fn();
+    mockAppointmentDbUpdateAppointment = jest.fn();
+    mockAppointmentDbDeleteAppointment = jest.fn();
 });
 
 afterEach(() =>{
@@ -227,47 +233,175 @@ test('given:patient id not found, when: appointment is created, then:an error is
     await expect(addAppointment).rejects.toThrow('Patient not found with the given ID.');
 });
 
-// test('given : a valid input, when: appointment is veing updated, then: appointment is updated', async()=>{
-//     const mockGetAppointmentById = jest.fn().mockResolvedValue(
-//         new Appointment({ start_time, end_time, status, date, doctor, patient, location: appointmentLocation })
-//     );
-//     const mockUpdateAppointment = jest.fn().mockResolvedValue(
-//         new Appointment({ start_time, end_time, status: 'Completed', date, doctor, patient, location: appointmentLocation })
-//     );
 
-//     const mockDoctordbGetDoctorById = jest.fn().mockResolvedValue(doctor);
+test('given: non-existing appointment id, when: appointment is updated, then: an error is thrown', async () => {
+    // Given
+    const nonExistingId = -1;
+    const updatedData: AppointmentInput = {
+        start_time: new Date('2024-12-05T10:00:00'),
+        end_time: new Date('2024-12-05T11:00:00'),
+        status: 'Rescheduled',
+        date: new Date('2024-12-05'),
+        doctor: doctorInput,
+        patient: patientInput,
+        location: locationInput,
+    };
 
-//     const mockPatientdbGetPatientById = jest.fn().mockResolvedValue(patient);
+    mockAppointmentDbGetAppointmentById.mockResolvedValue(null);
 
-//     appointmentDb.getAppointmentById = mockGetAppointmentById;
-//     appointmentDb.updateAppointment = mockUpdateAppointment;
-//     doctorDb.getDoctorById = mockDoctordbGetDoctorById;
-//     patientDb.getPatientById = mockPatientdbGetPatientById;
+    // When
+    const updateAppointmentPromise = appointmentService.updateAppointment(nonExistingId, updatedData);
 
-//     const result = await appointmentService.updateAppointment(1, {
-//         start_time,
-//         end_time,
-//         status: 'Completed',
-//         date,
-//         doctor: doctorInput,
-//         patient: patientInput,
-//         location: locationInput,
-//     });
-
-//     expect(result?.getStatus()).toBe('Completed');
-//     expect(mockGetAppointmentById).toHaveBeenCalledWith(1);
-//     expect(mockUpdateAppointment).toHaveBeenCalledWith(1, {
-//         start_time,
-//         end_time,
-//         status: 'Completed',
-//         date,
-//         doctor: doctorInput,
-//         patient: patientInput,
-//         location: locationInput,
-//     });
-//     expect(mockDoctordbGetDoctorById).toHaveBeenCalledWith({ id: doctorInput.id });
-//     expect(mockPatientdbGetPatientById).toHaveBeenCalledWith({ id: patientInput.id });
-// })
+    // Then
+    await expect(updateAppointmentPromise).rejects.toThrow('Appointment with ID -1 not found.');
+});
 
 
+test('given: missing doctor id, when: appointment is updated, then: an error is thrown', async () => {
+// Given
+const doctorInput1: DoctorInput= {
+    id: undefined,
+    user: userInputDoctor,
+    speciality: 'Cardiology',
+    service : serviceInput,
+    availability: true
+};
+const updatedData: AppointmentInput = {
+    start_time,
+    end_time,
+    status,
+    date,
+    doctor: doctorInput1, 
+    patient: patientInput,
+    location: locationInput,
+};
 
+const existingAppointment = new Appointment({
+    start_time,
+    end_time,
+    status,
+    date,
+    doctor,
+    patient,
+    location: appointmentLocation,
+});
+
+mockAppointmentDbGetAppointmentById.mockResolvedValue(existingAppointment);
+
+// When
+const updateAppointmentPromise = appointmentService.updateAppointment(existingAppointment.getId() as number, updatedData);
+
+// Then
+await expect(updateAppointmentPromise).rejects.toThrow('Database error. See server log for details.');
+
+});
+
+
+test('given: non-existing appointment id, when: appointment is deleted, then: an error is thrown', async () => {
+    // Given
+    const nonExistingId = -1;
+
+    mockAppointmentDbGetAppointmentById.mockResolvedValue(null);
+
+    // When
+    const deleteAppointmentPromise = appointmentService.deleteAppointment(nonExistingId);
+
+    // Then
+    await expect(deleteAppointmentPromise).rejects.toThrow('Appointment with ID -1 not found.');
+});
+
+
+test('given : a valid input, when: appointment is being updated, then: appointment is updated', async()=>{
+    const mockGetAppointmentById = jest.fn().mockResolvedValue(
+        new Appointment({ start_time, end_time, status, date, doctor, patient, location: appointmentLocation })
+    );
+    const mockUpdateAppointment = jest.fn().mockResolvedValue(
+        new Appointment({ start_time, end_time, status: 'Completed', date, doctor, patient, location: appointmentLocation })
+    );
+
+    const mockDoctordbGetDoctorById = jest.fn().mockResolvedValue(doctor);
+
+    const mockPatientdbGetPatientById = jest.fn().mockResolvedValue(patient);
+
+    appointmentDb.getAppointmentById = mockGetAppointmentById;
+    appointmentDb.updateAppointment = mockUpdateAppointment;
+    doctorDb.getDoctorById = mockDoctordbGetDoctorById;
+    patientDb.getPatientById = mockPatientdbGetPatientById;
+
+    const result = await appointmentService.updateAppointment(1, {
+        start_time,
+        end_time,
+        status: 'Completed',
+        date,
+        doctor: doctorInput,
+        patient: patientInput,
+        location: locationInput,
+    });
+
+    expect(result?.getStatus()).toBe('Completed');
+    expect(mockGetAppointmentById).toHaveBeenCalledWith({id: 1});
+    expect(mockUpdateAppointment).toHaveBeenCalledWith(1, {
+        start_time,
+        end_time,
+        status: 'Completed',
+        date,
+        doctor: doctorInput,
+        patient: patientInput,
+        location: locationInput,
+    });
+    expect(mockDoctordbGetDoctorById).toHaveBeenCalledWith({ id: doctorInput.id });
+    expect(mockPatientdbGetPatientById).toHaveBeenCalledWith({ id: patientInput.id });
+});
+
+test('given: an already deleted appointment, when: appointment is deleted, then: an error is thrown', async () => {
+    // Given
+    const existingAppointment = new Appointment({
+        start_time,
+        end_time,
+        status,
+        date,
+        doctor,
+        patient,
+        location: appointmentLocation,
+    });
+
+    mockAppointmentDbGetAppointmentById.mockResolvedValue(existingAppointment);
+    mockAppointmentDbDeleteAppointment.mockResolvedValue(null); 
+
+    // When
+    const deleteAppointmentPromise = appointmentService.deleteAppointment(existingAppointment.getId() as number);
+
+    // Then
+    await expect(deleteAppointmentPromise).rejects.toThrow('Database error. See server log for details.');
+});
+
+test('given: existing appointment, when: appointment is deleted, then: appointment is deleted', async () => {
+    // Given
+    const appointmentId = 1;
+
+    mockAppointmentDbGetAppointmentById.mockResolvedValue(
+        new Appointment({
+            id: appointmentId,
+            start_time,
+            end_time,
+            status,
+            date,
+            doctor,
+            patient,
+            location: appointmentLocation,
+        })
+    );
+
+    mockAppointmentDbDeleteAppointment.mockResolvedValue(true);
+
+    appointmentDb.getAppointmentById = mockAppointmentDbGetAppointmentById;
+    appointmentDb.deleteAppointment = mockAppointmentDbDeleteAppointment;
+
+    // When
+    const result = await appointmentService.deleteAppointment(appointmentId);
+
+    // Then
+    expect(mockAppointmentDbGetAppointmentById).toHaveBeenCalledWith({id:1});
+    expect(mockAppointmentDbDeleteAppointment).toHaveBeenCalledWith({id: appointmentId});
+    expect(result).toBe("The appointment was cancelled successfully.");
+});

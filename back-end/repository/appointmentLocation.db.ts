@@ -56,7 +56,7 @@ const getAllAppointmentLocations = async(): Promise<AppointmentLocation[]> =>{
 const getAppointmentLocationById = async({id}:{id: number}) : Promise<AppointmentLocation| null> =>{
     try{
         const appointmentLocationById = await database.appointmentLocation.findUnique({
-            where : {id}
+            where : {id},
         });
 
         return appointmentLocationById ? AppointmentLocation.from(appointmentLocationById) :  null;

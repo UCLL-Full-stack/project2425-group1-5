@@ -19,7 +19,7 @@ const getAllUsers = async({ role} : { role: Role}): Promise<User[]> => {
 }
 
 
-const getUserByName = async({name} : {name: string}): Promise<User> =>{
+const getUserByName = async( name: string): Promise<User> =>{
     const user = await userDb.getUserByName({name});
     if (!user) {
         throw new Error(`User with name: ${name} does not exist.`);
@@ -27,25 +27,27 @@ const getUserByName = async({name} : {name: string}): Promise<User> =>{
     return user;
 };
 
-const createUser = async(userInput: UserInput): Promise<User> =>{
-    const existingUser = await getUserByName({name: userInput.name});
+const createUser = async(userInput: UserInput): Promise<User> => {
+    const existingUser = await userDb.getUserByName({name: userInput.name});
 
-    if(existingUser){
+    if (existingUser !== null) {
         throw new Error(`User with username: ${userInput.name} is already registered.`);
     }
-    const hashedPassword = await bcrypt.hash(userInput.password,12);
+
+    const hashedPassword = await bcrypt.hash(userInput.password, 12);
 
     const user = new User({
-        name : userInput.name,
-        email : userInput.email,
-        password : hashedPassword,
-        role : userInput.role
+        name: userInput.name,
+        email: userInput.email,
+        password: hashedPassword,
+        role: userInput.role as Role
     });
-    return userDb.createUser(user);
-};
 
+    return userDb.createUser(user);
+    
+};
 const login = async({name, password}: UserInput): Promise<AuthenticationResponse> =>{
-    const user = await getUserByName({name});
+    const user = await getUserByName(name);
     const result = await bcrypt.compare(password, user.getPassword());
     if(!result){
         throw new Error("Incorrect password.");

@@ -50,7 +50,7 @@ type AppointmentInput = {
 type AuthenticationResponse = {
     token: string;
     name: string;
-    role: Role;
+    role: string;
 };
 export {
     Role,

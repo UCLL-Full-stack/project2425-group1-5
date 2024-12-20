@@ -1,11 +1,12 @@
 import { Doctor } from "../model/Doctor";
 import { Appointment } from "../model/Appointment";
-import { AppointmentInput } from "../types";
+import { AppointmentInput, Role } from "../types";
 import { User } from "../model/User";
 import { Patient } from "../model/Patient";
 import { Service } from "../model/Service";
 import { AppointmentLocation } from "../model/AppointmentLocation";
 import database from "./database";
+import { UnauthorizedError } from "express-jwt";
 
 // const service1 = new Service({
 //     name: "Cardiology",
@@ -375,12 +376,49 @@ const deleteAppointment = async({id}:{id: number}) : Promise<String> =>{
     }
 }
 
+const getAppointmentForDoctor = async({name}:{name: string}): Promise<Appointment[]> =>{
+    try{
+        const appointmentsPrisma = await database.appointment.findMany({
+            where: {doctor: {user: {name: name}}},
+            include: {
+                doctor : {include: {user: true, service: true}},
+                patient: {include: {user: true}},
+                location: true,
+            },
+        });
+        return appointmentsPrisma.map((appointment)=> Appointment.from(appointment) );
+    }catch(error){
+        console.log(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
+
+const getAppointmentForPatient = async({name}:{name: string}): Promise<Appointment[]> =>{
+    try{
+        const appointmentsPrisma = await database.appointment.findMany({
+            where: {patient: {user: {name}}},
+            include: {
+                doctor : {include: {user: true, service: true}},
+                patient: {include: {user: true}},
+                location: true,
+            },
+        });
+        return appointmentsPrisma.map((appointment)=> Appointment.from(appointment) );
+    }catch(error){
+        console.log(error);
+        throw new Error("Database error. See server log for details.");
+    }
+};
+
+
 export default {
     getAllAppointments,
     addAppointment,
     getAppointmentByDoctorAndPatient,
     getAppointmentById,
     updateAppointment,
-    deleteAppointment
+    deleteAppointment,
+    getAppointmentForDoctor, 
+    getAppointmentForPatient
 
 };

@@ -2,26 +2,56 @@
     "app.title": "MediAssist",
     "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
     "login": {
-        "title": "Login",
-        "button": "Login",
-        "success": "Login succesvol. Terug naar homepage..",
+        "title": "Inloggen",
+        "button": "Inloggen",
+        "success": "Inloggen succesvol. Terug naar de startpagina...",
         "validate": {
             "name": "Naam is verplicht",
-            "password": "Wachtwoord is vereist"
+            "password": "Wachtwoord is verplicht"
         },
         "label": {
-            "username":  "Gebruikersnaam:",
-            "password": "Wachtwoord:"
+            "username": "Gebruikersnaam:",
+            "password": "Wachtwoord:",
+            "email": "E-mail:",
+            "role": "Role:"
         },
         "header": {
-            "welcome":"Welkom",
+            "welcome": "Welkom",
             "nav": {
                 "home": "Home",
-                "doctors": "Artsen",
-                "appointments": "Afspraak",
-                "login": "Login",
-                "logout": "Logout"
+                "doctors": "Dokters",
+                "appointments": "Afspraken",
+                "login": "Inloggen",
+                "logout": "Uitloggen"
             }
+        },
+        "appointments": {
+            "filter": "Filter aankomende afspraken",
+            "start_time": "Starttijd",
+            "end_time": "Eindtijd",
+            "status": "Status",
+            "date": "Datum",
+            "reschedule": "Verplaatsen",
+            "delete": "Verwijderen",
+            "title" : "Overzicht van de Afspraken",
+            "appointment" : "Overzicht van de Afspraken",
+            "selected_appointment": "Geselecteerde Afspraak: ",
+            "startTime": "Starttijd: ",
+            "endTime": "Eindtijd: ",
+            "Status": "Status: ",
+            "Date": "Datum: ",
+            "doctor_id":"Arts Id: ",
+            "doctor_name": "Naam van de arts: ",
+            "doctor_email": "E-mail van de dokter: ",
+            "doctor_speciality": "Specialiteit van de arts: ",
+            "doctor_availability": "Beschikbaarheid van de artsen: ",
+            "patient_id": "Patiënt ID: ",
+            "patient_name": "Naam van de patiënt: ",
+            "patient_email": "E-mailadres van de patiënt: "
+        },
+        "home" : {
+            "welcome" : "Welkom!",
+            "text" : "Met MediAssist kan je eenvoudig afspraken met artsen vinden en inplannen. Als patiënt kunt u specialisten zoeken op basis van uw behoeften, hun beschikbaarheid bekijken en afspraken maken die bij uw schema passen. U kunt ook moeiteloos afspraken verzetten of annuleren, terwijl u gedetailleerde doktersprofielen verkent om weloverwogen beslissingen te nemen over uw gezondheidszorg."
         }
     }
 }

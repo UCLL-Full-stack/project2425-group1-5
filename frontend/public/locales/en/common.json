@@ -11,7 +11,9 @@
         },
         "label": {
             "username": "Username:",
-            "password": "Password:"
+            "password": "Password:",
+            "email" : "Email:",
+            "role": "Role:"
         },
         "header": {
             "welcome": "Welcome",
@@ -22,7 +24,34 @@
                 "login": "Login",
                 "logout": "Logout"
             }
+        },
+        "appointments" : {
+            "filter" : "Filter Upcoming Appointments",
+            "start_time": "Start Time",
+            "end_time": "End Time",
+            "status": "Status",
+            "date": "Date",
+            "reschedule" : "Reschedule",
+            "delete" : "Delete",
+            "title" : "Appointments Overview",
+            "appointment" : "Appointments Overview",
+            "selected_appointment": "Selected Appointment: ",
+            "startTime": "Start Time: ",
+            "endTime": "End Time: ",
+            "Status": "Status: ",
+            "Date": "Date: ",
+            "doctor_id":"Doctor Id: ",
+            "doctor_name": "Doctor Name: ",
+            "doctor_email": "Doctor Email: ",
+            "doctor_speciality": "Doctor Speciality: ",
+            "doctor_availability": "Doctor Availability: ",
+            "patient_id": "Patient Id: ",
+            "patient_name": "Patient Name: ",
+            "patient_email": "Patient Email: "
+        },
+        "home" : {
+            "welcome" : "Welcome!",
+            "text" : "MediAssist allows you to easily find and schedule appointments with doctors. As a patient, you can search for specialists based on your needs, view their availability, and book appointments that suit your schedule. You can also reschedule or cancel appointments effortlessly, all while exploring detailed doctor profiles to make informed decisions about your healthcare."
         }
-        
     }
 }

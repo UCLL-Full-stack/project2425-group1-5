@@ -4,6 +4,7 @@ import { StatusMessage } from "@/types";
 import classNames from "classnames";
 import { useTranslation } from "next-i18next";
 import UserService from "@/services/UserService";
+import Link from "next/link";
 
 const UserLoginForm: React.FC = () => {
     const router = useRouter();
@@ -141,7 +142,7 @@ const UserLoginForm: React.FC = () => {
                 <input 
                 // className=""
                 id= "passwordInput"
-                type = "text"
+                type = "password"
                 value ={password}
                 onChange={(event) => setPassword(event.target.value)}
                 />
@@ -159,6 +160,15 @@ const UserLoginForm: React.FC = () => {
                 {/* Login */}
                 {t('login.button')}
             </button>
+
+            <Link href={`/signup`}>
+            <button
+            className="text-blue bg-blue hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+
+            >
+                Sign up 
+            </button>
+            </Link>
         </form>
         </>
     );

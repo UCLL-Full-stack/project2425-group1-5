@@ -1,7 +1,7 @@
-const getAllDoctors = async() =>{
+const getAllAppointmentLocations = async() =>{
     const token = JSON.parse(localStorage.getItem("loggedInUser")|| "null")?.token;
     return fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/doctors",
+        process.env.NEXT_PUBLIC_API_URL + "/appointmentLocations",
         {
             method : "GET",
             headers : {
@@ -12,10 +12,10 @@ const getAllDoctors = async() =>{
     );
 };
 
-const getDoctorById = (doctorId : String) =>{
+const getAppointmentLocationById = (appointmentLocationId : String) =>{
     const token = JSON.parse(localStorage.getItem("loggedInUser")|| "null")?.token;
 
-    return fetch(process.env.NEXT_PUBLIC_API_URL + `/doctors/${doctorId}`,{
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/appointmentLocations/${appointmentLocationId}`,{
        method : "GET",
        headers : {
           "Content-Type" : "application/json",
@@ -27,9 +27,9 @@ const getDoctorById = (doctorId : String) =>{
  
 
 
-const DoctorService = {
-    getAllDoctors,
-    getDoctorById
+const AppointmentLocationService = {
+    getAllAppointmentLocations,
+    getAppointmentLocationById
 };
 
-export default DoctorService;
+export default AppointmentLocationService;

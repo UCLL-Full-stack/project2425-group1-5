@@ -1,9 +1,10 @@
 import { Appointment } from "../model/Appointment";
 import doctorDb from "../repository/doctor.db";
 import appointmentDb from "../repository/appointment.db";
-import { AppointmentInput } from "../types";
+import { AppointmentInput, Role } from "../types";
 import patientDb from "../repository/patient.db";
 import appointmentLocationDb from "../repository/appointmentLocation.db";
+import { UnauthorizedError } from "express-jwt";
 
 const getUpcomingAppointments = async() : Promise<Appointment[]>=>{
     const allApointments = await appointmentDb.getAllAppointments();
@@ -11,13 +12,24 @@ const getUpcomingAppointments = async() : Promise<Appointment[]>=>{
     const now = new Date();
 
     const upcomingAppointments =allApointments.filter((appointment: Appointment) => new Date(appointment.getDate()) > now);
+    console.log(upcomingAppointments)
 
     return upcomingAppointments;
 }
 
 
-const getAllAppointments = async() : Promise<Appointment[]> =>{
-    return appointmentDb.getAllAppointments();
+const getAllAppointments = async(name: string, role: string) : Promise<Appointment[]> =>{
+    if(role === "admin"){
+        return appointmentDb.getAllAppointments();
+    } else if (role === "doctor"){
+        return appointmentDb.getAppointmentForDoctor({name});
+    }else if (role === "patient"){
+        return appointmentDb.getAppointmentForPatient({name});
+    }else{
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
 }
 
 const getAppointmentById= async(id: number) : Promise<Appointment |null>=>{

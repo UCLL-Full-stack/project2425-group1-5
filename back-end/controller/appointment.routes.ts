@@ -60,7 +60,8 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import appointmentService from '../service/appointment.service';
-import { AppointmentInput } from '../types';
+import { AppointmentInput, Role } from '../types';
+import appointmentLocationService from '../service/appointmentLocation.service';
 
 
 /**
@@ -135,12 +136,14 @@ appointmentRouter.get('/', async(req: Request, res: Response)=>{
  *             schema:
  *               $ref: '#/components/schemas/Appointment'
  */
-appointmentRouter.get('/', async(req:Request, res: Response)  =>{
+appointmentRouter.get('/', async(req:Request, res: Response, next: NextFunction)  =>{
     try{
-        const appointments = await appointmentService.getAllAppointments();
+        const request = req as Request & {auth: {name: string; role: string}};
+        console.log(request.auth.name, request.auth.role)
+        const appointments = await appointmentService.getAllAppointments(request.auth.name, request.auth.role);
         res.status(200).json(appointments);
     }catch(error){
-        res.status(400).json({status: 'error'});
+        next(error)
     }
 });
 
@@ -179,7 +182,7 @@ appointmentRouter.get('/' , async(req: Request, res: Response)=>{
 
 /**
  * @swagger
- * /appointments/{id}:
+ * /appointments/update/{id}:
  *   put:
  *     security:
  *       - bearerAuth: []
@@ -205,7 +208,7 @@ appointmentRouter.get('/' , async(req: Request, res: Response)=>{
  *               schema:
  *                 $ref: '#/components/schemas/Appointment'
  */
-appointmentRouter.put('/:id', async(req:Request, res: Response)=>{
+appointmentRouter.put('/update/:id', async(req:Request, res: Response)=>{
     try{
         const id = parseInt(req.params.id);
         const updatedData : AppointmentInput = req.body;
@@ -253,5 +256,7 @@ appointmentRouter.delete('/:id', async (req: Request, res: Response) =>{
         res.status(400).json({status: 'error'});
     }
 });
+
+
 
 export {appointmentRouter}

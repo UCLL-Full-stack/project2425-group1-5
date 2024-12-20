@@ -28,13 +28,16 @@ const Home: React.FC = () => {
             width={50}
             height={50}
           />
-          <h1>Welcome!</h1>
+          <h1>
+            {t('login.home.welcome')}
+          </h1>
         </span>
 
         <div className={styles.description}>
           <p>
-            MediAssist allows you to easily find and schedule appointments with doctors. As a patient, you can search for specialists based on your needs, view their availability, and book appointments that suit your schedule.
-            You can also reschedule or cancel appointments effortlessly, all while exploring detailed doctor profiles to make informed decisions about your healthcare.
+            {/* MediAssist allows you to easily find and schedule appointments with doctors. As a patient, you can search for specialists based on your needs, view their availability, and book appointments that suit your schedule.
+            You can also reschedule or cancel appointments effortlessly, all while exploring detailed doctor profiles to make informed decisions about your healthcare. */}
+            {t('login.home.text')}
           </p>
         </div>
       </main>

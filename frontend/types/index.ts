@@ -1,6 +1,12 @@
 
-type Role = 'admin' | 'doctor' | 'patient';
+export type Role = 'admin' | 'doctor' | 'patient';
 
+type Service = {
+    id?: number;
+    name : string;
+    description: string;
+    price : number;
+}
 export type User ={
     id?: number;
     name?: string;
@@ -14,12 +20,20 @@ export type Doctor = {
     user : User;
     speciality: string;
     availability : boolean;
+    service: Service;
 };
 
 export type Patient = {
     id?: number;
     user : User;
 };
+
+export type AppointmentLocation = {
+    id?: number;
+    street_number : number;
+    city : string;
+    postal_code: number;
+}
 
 export type Appointment = {
     id?: number;
@@ -29,7 +43,10 @@ export type Appointment = {
     date : Date;
     doctor: Doctor;
     patient : Patient;
+    location : AppointmentLocation;
 };
+
+
 
 export type StatusMessage = {
     message: string;

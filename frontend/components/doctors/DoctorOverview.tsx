@@ -1,6 +1,7 @@
 import { Doctor } from "@/types";
 import Link from "next/link";
 
+
 type Props = {
     doctors: Array<Doctor>;
     selectDoctor : (doctor: Doctor) => void;
@@ -16,6 +17,7 @@ const DoctorOverview: React.FC<Props> = ({ doctors , selectDoctor}: Props) => {
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Availability</th>
+                            <th scope="col">Schedule Appointment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,7 +33,17 @@ const DoctorOverview: React.FC<Props> = ({ doctors , selectDoctor}: Props) => {
                                     {doctor.availability ? 'Available' : 'Not Available'}
                                 </p>
                                 </td>
+                                <td>
+                                    {doctor.availability && (
+                                        <Link href={`/appointments/${doctor.id}`}>
+                                            <button className="schedule-appointment-btn rounded px-4 py-2">
+                                                Schedule
+                                            </button>
+                                        </Link>
+                                    )}
+                                </td>
                             </tr>
+                            
                         ))}
                     </tbody>
                 </table>
